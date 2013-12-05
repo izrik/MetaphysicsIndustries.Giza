@@ -1,6 +1,8 @@
 using System;
 using NUnit.Framework;
 
+using NodeMatch = MetaphysicsIndustries.Giza.NodeMatch<MetaphysicsIndustries.Giza.InputChar>;
+
 namespace MetaphysicsIndustries.Giza.Test
 {
     public class NodeMatchTest

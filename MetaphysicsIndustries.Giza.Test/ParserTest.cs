@@ -962,9 +962,9 @@ namespace MetaphysicsIndustries.Giza.Test
 
         public class MockTokenSource : ITokenSource
         {
-            public readonly Dictionary<int, TokenizationInfo> Tokenizations = new Dictionary<int, TokenizationInfo>();
+            public readonly Dictionary<int, InputElementSet<Token>> Tokenizations = new Dictionary<int, InputElementSet<Token>>();
 
-            public TokenizationInfo GetTokensAtLocation(int index)
+            public InputElementSet<Token> GetInputAtLocation(int index)
             {
                 return Tokenizations[index];
             }
@@ -987,12 +987,12 @@ namespace MetaphysicsIndustries.Giza.Test
             def.StartNodes.Add(anode);
             def.EndNodes.Add(anode);
             def.Nodes.Add(anode);
-            tokenSource.Tokenizations[0] = new TokenizationInfo() {
-                Tokens = new Token[] {
+            tokenSource.Tokenizations[0] = new InputElementSet<Token>() {
+                InputElements = new Token[] {
                     new Token(def, new InputPosition(0), "a", 1)
                 },
             };
-            tokenSource.Tokenizations[1] = new TokenizationInfo() {
+            tokenSource.Tokenizations[1] = new InputElementSet<Token>() {
                 Errors = new List<Error> {
                     new MockError() {
                         ErrorType = MockError.MockErrorType

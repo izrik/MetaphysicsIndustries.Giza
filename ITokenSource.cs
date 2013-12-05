@@ -3,9 +3,9 @@ using System.Collections.Generic;
 
 namespace MetaphysicsIndustries.Giza
 {
-    public interface ITokenSource
+    public interface ITokenSource : IInputSource<Token>
     {
-        TokenizationInfo GetTokensAtLocation(int index);
+//        TokenizationInfo GetTokensAtLocation(int index);
     }
 }
 

@@ -42,15 +42,15 @@ namespace MetaphysicsIndustries.Giza
         List<string> _intokens;
         List<Token> _tokens = new List<Token>();
 
-        public TokenizationInfo GetTokensAtLocation(int index)
+        public InputElementSet<Token> GetInputAtLocation(int index)
         {
-            TokenizationInfo tinfo = new TokenizationInfo();
+            InputElementSet<Token> tinfo = new InputElementSet<Token>();
 
             if (index >= _intokens.Count)
             {
                 tinfo.EndOfInput = true;
                 tinfo.EndOfInputPosition = new InputPosition(_intokens.Count);
-                tinfo.Tokens = new Token[0];
+                tinfo.InputElements = new Token[0];
                 return tinfo;
             }
 
@@ -59,15 +59,15 @@ namespace MetaphysicsIndustries.Giza
 
             if (_tokens[index].Value != null)
             {
-                tinfo.Tokens = new Token[] { _tokens[index] };
+                tinfo.InputElements = new Token[] { _tokens[index] };
                 return tinfo;
             }
 
             var nodeMatches = _spanner.Match(_intokens[index], tinfo.Errors);
             var leaf = nodeMatches[0];
 
-            NodeMatch tokenEnd = leaf.Previous;
-            NodeMatch tokenStart = tokenEnd.StartDef;
+            var tokenEnd = leaf.Previous;
+            var tokenStart = tokenEnd.StartDef;
 
             int length = leaf.StartPosition.Index - tokenStart.StartPosition.Index + 1;
             var token = new Token(
@@ -78,7 +78,7 @@ namespace MetaphysicsIndustries.Giza
 
             _tokens[index] = token;
 
-            tinfo.Tokens = new Token[] { _tokens[index] };
+            tinfo.InputElements = new Token[] { _tokens[index] };
             return tinfo;
         }
     }

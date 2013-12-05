@@ -35,14 +35,14 @@ namespace MetaphysicsIndustries.Giza
         Spanner _spanner;
         Definition _tokenDef;
         CharacterSource _input;
-        readonly Dictionary<int, TokenizationInfo> _tokenizationsByIndex = new Dictionary<int, TokenizationInfo>();
+        readonly Dictionary<int, InputElementSet<Token>> _tokenizationsByIndex = new Dictionary<int, InputElementSet<Token>>();
 
         struct TokenizationByIndex
         {
             public TokenizationByIndex(int index,
                                        ICollection<Error> errors,
                                        bool endOfInput,
-                                       ICollection<NodeMatch> matchTreeLeaves,
+                                       ICollection<NodeMatch<InputChar>> matchTreeLeaves,
                                        InputPosition lastPosition)
             {
                 Index = index;
@@ -55,11 +55,15 @@ namespace MetaphysicsIndustries.Giza
             public int Index;
             public ICollection<Error> Errors;
             public bool EndOfInput;
-            public ICollection<NodeMatch> MatchTreeLeaves;
+            public ICollection<NodeMatch<InputChar>> MatchTreeLeaves;
             public InputPosition LastPosition;
         }
 
-        public TokenizationInfo GetTokensAtLocation(int index)
+        public InputElementSet<Token> GetInputAtLocation(int index)
+        {
+            return GetTokensAtLocation(index);
+        }
+        public InputElementSet<Token> GetTokensAtLocation(int index)
         {
             Logger.WriteLine("Tokenizer: Getting tokens at index {0}, current input position is {1}", index, _input.CurrentPosition.Index);
 
@@ -68,7 +72,7 @@ namespace MetaphysicsIndustries.Giza
                 return _tokenizationsByIndex[index];
             }
 
-            TokenizationInfo tinfo = new TokenizationInfo();
+            InputElementSet<Token> tinfo = new InputElementSet<Token>();
             _tokenizationsByIndex[index] = tinfo;
 
             var tokenizations = new Queue<TokenizationByIndex>();
@@ -81,7 +85,7 @@ namespace MetaphysicsIndustries.Giza
 
                 bool endOfInput2;
                 var errors2 = new List<Error>();
-                var tokenLeaves = new Set<NodeMatch>();
+                var tokenLeaves = new Set<NodeMatch<InputChar>>();
                 InputPosition endOfInputPosition2;
 
                 var leaves = _spanner.Match(_input, errors2,
@@ -169,17 +173,17 @@ namespace MetaphysicsIndustries.Giza
 
             if (hasLeaves.Count > 0)
             {
-                var matchTreeLeaves = new Set<NodeMatch>();
+                var matchTreeLeaves = new Set<NodeMatch<InputChar>>();
 
                 foreach (var tok in hasLeaves)
                 {
                     matchTreeLeaves.AddRange(tok.MatchTreeLeaves);
                 }
 
-                foreach (NodeMatch leaf in matchTreeLeaves)
+                foreach (NodeMatch<InputChar> leaf in matchTreeLeaves)
                 {
-                    NodeMatch tokenEnd = leaf.Previous;
-                    NodeMatch tokenStart = tokenEnd.StartDef;
+                    NodeMatch<InputChar> tokenEnd = leaf.Previous;
+                    NodeMatch<InputChar> tokenStart = tokenEnd.StartDef;
 
                     tokens.Add(new Token(
                         definition: tokenEnd.Previous.Node.ParentDefinition,
@@ -204,7 +208,7 @@ namespace MetaphysicsIndustries.Giza
 
             if (hasLeaves.Count > 0 || hasEnd.Count > 0)
             {
-                tinfo.Tokens = tokens.ToArray();
+                tinfo.InputElements = tokens.ToArray();
                 return tinfo;
             }
             else
@@ -222,15 +226,15 @@ namespace MetaphysicsIndustries.Giza
                 }
 
                 tinfo.Errors.AddRange(mintok.Errors);
-                tinfo.Tokens = new Token[0];
+                tinfo.InputElements = new Token[0];
                 return tinfo;
             }
         }
 
-        string CollectValue(NodeMatch tokenEnd)
+        string CollectValue(NodeMatch<InputChar> tokenEnd)
         {
             if (tokenEnd == null) throw new ArgumentNullException("tokenEnd");
-            if (tokenEnd.Transition != NodeMatch.TransitionType.EndDef) throw new ArgumentException("tokenDef must be an EndDef");
+            if (tokenEnd.Transition != NodeMatch<InputChar>.TransitionType.EndDef) throw new ArgumentException("tokenDef must be an EndDef");
             if (tokenEnd.StartDef == null) throw new ArgumentException("tokenDef must have a corresponding StartDef");
 
             var chs = new List<char>();
