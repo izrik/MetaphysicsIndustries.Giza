@@ -103,6 +103,81 @@ namespace MetaphysicsIndustries.Giza
                 sub.RenderSpanHierarchy(sb, indent2);
             }
         }
+
+        public string RenderSpanHierarchyAsCSharpExpression(Dictionary<Node, string> nodeNames, string indent="")
+        {
+            StringBuilder sb = new StringBuilder();
+            this.RenderSpanHierarchyAsCSharpExpression(sb, nodeNames, indent);
+            return sb.ToString();
+        }
+        void RenderSpanHierarchyAsCSharpExpression(StringBuilder sb, Dictionary<Node, string> nodeNames, string indent)
+        {
+            sb.Append(indent);
+            sb.Append("new Span(");
+            if (Node != null ||
+                Value != null ||
+                Subspans.Count > 0)
+            {
+                sb.AppendLine();
+            }
+            if (Node != null)
+            {
+                sb.Append(indent);
+                sb.Append("    ");
+                sb.AppendFormat("node: {0}", Node.ToString());
+            }
+            if (Node != null &&
+                Value != null)
+            {
+                sb.AppendLine(",");
+            }
+            if (Value != null)
+            {
+                sb.Append(indent);
+                sb.Append("    ");
+                sb.AppendFormat("value: \"{0}\"", EscapeString(Value));
+            }
+            if ((Node != null || Value != null) &&
+                Subspans.Count > 0)
+            {
+                sb.AppendLine(",");
+            }
+            if (Subspans.Count > 0)
+            {
+                sb.Append(indent);
+                sb.AppendLine("    subspans: new [] {");
+                var indent2 = indent + "        ";
+                bool first = true;
+                foreach (var sub in Subspans)
+                {
+                    if (first)
+                    {
+                        first = false;
+                    }
+                    else
+                    {
+                        sb.AppendLine(",");
+                    }
+
+                    sub.RenderSpanHierarchyAsCSharpExpression(sb, nodeNames, indent2);
+                }
+                sb.AppendLine();
+                sb.Append(indent);
+                sb.Append("    }");
+            }
+            if (Node != null ||
+                Value != null ||
+                Subspans.Count > 0)
+            {
+                sb.AppendLine();
+            }
+            sb.Append(indent);
+            sb.Append(")");
+        }
+        string EscapeString(string s)
+        {
+            return s.Replace("\\", "\\\\").Replace("\t", "\\t").Replace("\r", "\\r").Replace("\n", "\\n").Replace("\"", "\\\"");
+        }
      }
 
     public class SpanSpanOrderedParentChildrenCollection : IList<Span>, IDisposable
