@@ -18,6 +18,7 @@ namespace MetaphysicsIndustries.Giza
 
             Nodes = new DefinitionNodeOrderedParentChildrenCollection(this);
         }
+//        public Definition(string name, bool ignoresCase, bool isToken, bool is
 
         public string Name;
         public DefinitionNodeOrderedParentChildrenCollection Nodes;
@@ -25,9 +26,23 @@ namespace MetaphysicsIndustries.Giza
         public Set<Node> EndNodes = new Set<Node>();
 
         public readonly Set<DefinitionDirective> Directives = new Set<DefinitionDirective>();
-        public bool MindWhitespace { get { return Directives.Contains(DefinitionDirective.MindWhitespace); } }
+        public bool MindWhitespace
+        {
+            get
+            {
+                return (Directives.Contains(DefinitionDirective.MindWhitespace) || 
+                        this.IsTokenized);
+            }
+        }
         public bool IgnoreCase { get { return Directives.Contains(DefinitionDirective.IgnoreCase); } }
-        public bool Atomic { get { return Directives.Contains(DefinitionDirective.Atomic); } }
+        public bool Atomic
+        {
+            get
+            {
+                return (Directives.Contains(DefinitionDirective.Atomic) || 
+                        this.IsTokenized);
+            }
+        }
         public bool IsTokenized
         {
             get
