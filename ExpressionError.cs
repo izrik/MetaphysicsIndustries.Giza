@@ -78,7 +78,7 @@ namespace MetaphysicsIndustries.Giza
         public static readonly ErrorType DefRefNameNotFound                         = new ErrorType(name:"DefRefNameNotFound",                                      descriptionFormat:"Definition '{DefinitionInfoName}' references a definition '{ReferencedDefinitionName}' which is not defined.");
 
         // spanned grammars
-        public static readonly ErrorType TokenizedDirectiveInNonTokenizedGrammar    = new ErrorType(name:"TokenizedDirectiveInNonTokenizedGrammar", isWarning:true, descriptionFormat:"One of directives 'token', 'subtoken', or 'comment' was applied to definition '{DefinitionInfoName}', which is in a spanned grammar. The directive will be ignored.");
+        public static readonly ErrorType TokenizedDirectiveInNonTokenizedGrammar    = new ErrorType(name:"TokenizedDirectiveInNonTokenizedGrammar", isWarning:true, descriptionFormat:"The token-oriented directive '{DirectiveName}' was applied to definition '{DefinitionInfoName}', which is in a spanned grammar. The directive will be ignored.");
 
         // parsed grammars
         public static readonly ErrorType MixedTokenizedDirectives                   = new ErrorType(name:"MixedTokenizedDirectives",                                descriptionFormat:"The definition \"{DefinitionInfoName}\" contains more than one of the 'token', 'subtoken', or 'comment' directives.");
