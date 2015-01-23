@@ -23,6 +23,7 @@ namespace MetaphysicsIndustries.Giza
                 }
             }
         }
+        public string DirectiveName;
         public int Index = -1;
 
         public override string Description
