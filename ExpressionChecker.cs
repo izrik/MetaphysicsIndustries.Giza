@@ -151,16 +151,24 @@ namespace MetaphysicsIndustries.Giza
         {
             List<Error> errors = CheckDefinitionInfos(defs);
 
+            var directives = new [] {
+                DefinitionDirective.Token,
+                DefinitionDirective.Subtoken,
+                DefinitionDirective.Comment,
+            };
+
             foreach (var def in defs)
             {
-                if (def.Directives.Contains(DefinitionDirective.Token) ||
-                    def.Directives.Contains(DefinitionDirective.Subtoken) ||
-                    def.Directives.Contains(DefinitionDirective.Comment))
+                foreach (var directive in directives)
                 {
-                    errors.Add(new ExpressionError {
-                        ErrorType = ExpressionError.TokenizedDirectiveInNonTokenizedGrammar,
-                        DefinitionInfo = def,
-                    });
+                    if (def.Directives.Contains(directive))
+                    {
+                        errors.Add(new ExpressionError {
+                            ErrorType = ExpressionError.TokenizedDirectiveInNonTokenizedGrammar,
+                            DefinitionInfo = def,
+                            DirectiveName = directive.GetName(),
+                        });
+                    }
                 }
             }
 

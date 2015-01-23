@@ -24,7 +24,9 @@ namespace MetaphysicsIndustries.Giza.Test
             Assert.AreEqual(1, errors.Count);
             Assert.AreEqual(ExpressionError.TokenizedDirectiveInNonTokenizedGrammar, errors[0].ErrorType);
             Assert.IsInstanceOf<ExpressionError>(errors[0]);
-            Assert.AreSame(defs[0], (errors[0] as ExpressionError).DefinitionInfo);
+            var error = (errors[0] as ExpressionError);
+            Assert.AreSame(defs[0], error.DefinitionInfo);
+            Assert.AreEqual("token", error.DirectiveName);
         }
 
         [Test()]
@@ -45,7 +47,9 @@ namespace MetaphysicsIndustries.Giza.Test
             Assert.AreEqual(1, errors.Count);
             Assert.AreEqual(ExpressionError.TokenizedDirectiveInNonTokenizedGrammar, errors[0].ErrorType);
             Assert.IsInstanceOf<ExpressionError>(errors[0]);
-            Assert.AreSame(defs[0], (errors[0] as ExpressionError).DefinitionInfo);
+            var error = (errors[0] as ExpressionError);
+            Assert.AreSame(defs[0], error.DefinitionInfo);
+            Assert.AreEqual("subtoken", error.DirectiveName);
         }
 
         [Test()]
@@ -66,7 +70,9 @@ namespace MetaphysicsIndustries.Giza.Test
             Assert.AreEqual(1, errors.Count);
             Assert.AreEqual(ExpressionError.TokenizedDirectiveInNonTokenizedGrammar, errors[0].ErrorType);
             Assert.IsInstanceOf<ExpressionError>(errors[0]);
-            Assert.AreSame(defs[0], (errors[0] as ExpressionError).DefinitionInfo);
+            var error = (errors[0] as ExpressionError);
+            Assert.AreSame(defs[0], error.DefinitionInfo);
+            Assert.AreEqual("comment", error.DirectiveName);
         }
 
 
