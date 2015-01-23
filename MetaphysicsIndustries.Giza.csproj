@@ -115,6 +115,7 @@
     <None Include="StringFormatterGrammar.giza" />
     <None Include="LICENSE" />
     <None Include="README.md" />
+    <None Include="docs\whitespace-as-token.txt" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="CppCliGrammar.txt" />
