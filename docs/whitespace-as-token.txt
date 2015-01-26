@@ -90,8 +90,6 @@ The `<mind whitespace>` directive will be removed, and its semantics will be on
 all the time for all definitions.
 
 Todo:
-    Add the `<whitspace>` directive
-        check for multiple --> error
     Make it generate a default definition when not given
     Ignore all `<whitespace>` tokens
     Remove 'mine whitespace' from existing grammars

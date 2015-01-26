@@ -75,6 +75,29 @@ namespace MetaphysicsIndustries.Giza.Test
             Assert.AreEqual("comment", error.DirectiveName);
         }
 
+        [Test]
+        public void TestTokenInNonTokenized4()
+        {
+            var defs = new [] {
+                new DefinitionExpression {
+                    Name = "A",
+                },
+            };
+            defs[0].Directives.Add(DefinitionDirective.Whitespace);
+            defs[0].Items.Add(new LiteralSubExpression { Value = "literal" });
+
+            var ec = new ExpressionChecker();
+            var errors = ec.CheckDefinitionInfosForSpanning(defs);
+
+            Assert.IsNotNull(errors);
+            Assert.AreEqual(1, errors.Count);
+            Assert.AreEqual(ExpressionError.TokenizedDirectiveInNonTokenizedGrammar, errors[0].ErrorType);
+            Assert.IsInstanceOf<ExpressionError>(errors[0]);
+            var error = (errors[0] as ExpressionError);
+            Assert.AreSame(defs[0], error.DefinitionInfo);
+            Assert.AreEqual("whitespace", error.DirectiveName);
+        }
+
 
         [Test()]
         public void TestMixedTokenizedDirectives1()

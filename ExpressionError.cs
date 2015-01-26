@@ -92,6 +92,9 @@ namespace MetaphysicsIndustries.Giza
         public static readonly ErrorType AtomicInTokenDefinition                    = new ErrorType(name:"AtomicInTokenDefinition",                 isWarning:true, descriptionFormat:"Directive 'atomic' applied to the token definition '{DefinitionInfoName}' is redundant.");
         public static readonly ErrorType AtomicInCommentDefinition                  = new ErrorType(name:"AtomicInCommentDefinition",               isWarning:true, descriptionFormat:"Directive 'atomic' applied to the comment definition '{DefinitionInfoName}' is redundant.");
         public static readonly ErrorType MindWhitespaceInTokenizedDefinition        = new ErrorType(name:"MindWhitespaceInTokenizedDefinition",     isWarning:true, descriptionFormat:"Directive 'mind whitespace' applied to the token, subtoken, or comment definition '{DefinitionInfoName}' is redundant.");
+        public static readonly ErrorType DefinitionReferencesWhitespace             = new ErrorType(name:"DefinitionReferencesWhitespace",                          descriptionFormat:"The definition '{DefinitionInfoName}' references the <whitespace> definition.");
+        public static readonly ErrorType WhitespaceReferencesDefinition             = new ErrorType(name:"WhitespaceReferencesDefinition",                          descriptionFormat:"The whitespace definiton '{DefinitionInfoName}' references another definition.");
+        public static readonly ErrorType MultipleWhitespaceDefinitions              = new ErrorType(name:"MultipleWhitespaceDefinitions",                           descriptionFormat:"More than one definition uses the 'whitespace' directive.");
     }
 }
 

@@ -13,7 +13,8 @@ namespace MetaphysicsIndustries.Giza
             return
                 def.Directives.Contains(DefinitionDirective.Token) ||
                 def.Directives.Contains(DefinitionDirective.Subtoken) ||
-                def.Directives.Contains(DefinitionDirective.Comment);
+                def.Directives.Contains(DefinitionDirective.Comment) ||
+                def.Directives.Contains(DefinitionDirective.Whitespace);
         }
 
         public List<Error> CheckDefinitionInfosForParsing(IEnumerable<DefinitionExpression> defs)
@@ -32,6 +33,7 @@ namespace MetaphysicsIndustries.Giza
                 if (def.Directives.Contains(DefinitionDirective.Token)) numTokenizedDirectives++;
                 if (def.Directives.Contains(DefinitionDirective.Subtoken)) numTokenizedDirectives++;
                 if (def.Directives.Contains(DefinitionDirective.Comment)) numTokenizedDirectives++;
+                if (def.Directives.Contains(DefinitionDirective.Whitespace)) numTokenizedDirectives++;
 
                 if (numTokenizedDirectives > 1)
                 {
@@ -92,56 +94,82 @@ namespace MetaphysicsIndustries.Giza
 
                     DefinitionExpression target = defsByName[defref.DefinitionName];
 
-                    if (!IsTokenized(def) &&
-                        target.Directives.Contains(DefinitionDirective.Subtoken))
+                    if (def.Directives.Contains(DefinitionDirective.Whitespace))
                     {
                         errors.Add(new ExpressionError {
-                            ErrorType = ExpressionError.NonTokenReferencesSubtoken,
+                            ErrorType = ExpressionError.WhitespaceReferencesDefinition,
                             ExpressionItem = defref,
                             DefinitionInfo = def,
                         });
                     }
-
-                    if (!IsTokenized(def) &&
-                        target.Directives.Contains(DefinitionDirective.Comment))
+                    else if (target.Directives.Contains(DefinitionDirective.Whitespace))
                     {
                         errors.Add(new ExpressionError {
-                            ErrorType = ExpressionError.NonTokenReferencesComment,
+                            ErrorType = ExpressionError.DefinitionReferencesWhitespace,
                             ExpressionItem = defref,
                             DefinitionInfo = def,
                         });
                     }
-
-                    if (IsTokenized(def) &&
-                        target.Directives.Contains(DefinitionDirective.Token))
+                    else
                     {
-                        errors.Add(new ExpressionError {
-                            ErrorType = ExpressionError.TokenizedReferencesToken,
-                            ExpressionItem = defref,
-                            DefinitionInfo = def,
-                        });
-                    }
+                        if (!IsTokenized(def) &&
+                            target.Directives.Contains(DefinitionDirective.Subtoken))
+                        {
+                            errors.Add(new ExpressionError {
+                                ErrorType = ExpressionError.NonTokenReferencesSubtoken,
+                                ExpressionItem = defref,
+                                DefinitionInfo = def,
+                            });
+                        }
 
-                    if (IsTokenized(def) &&
-                        target.Directives.Contains(DefinitionDirective.Comment))
-                    {
-                        errors.Add(new ExpressionError {
-                            ErrorType = ExpressionError.TokenizedReferencesComment,
-                            ExpressionItem = defref,
-                            DefinitionInfo = def,
-                        });
-                    }
+                        if (!IsTokenized(def) &&
+                            target.Directives.Contains(DefinitionDirective.Comment))
+                        {
+                            errors.Add(new ExpressionError {
+                                ErrorType = ExpressionError.NonTokenReferencesComment,
+                                ExpressionItem = defref,
+                                DefinitionInfo = def,
+                            });
+                        }
 
-                    if (IsTokenized(def) &&
-                        !IsTokenized(target))
-                    {
-                        errors.Add(new ExpressionError {
-                            ErrorType = ExpressionError.TokenizedReferencesNonToken,
-                            ExpressionItem = defref,
-                            DefinitionInfo = def,
-                        });
+                        if (IsTokenized(def) &&
+                            target.Directives.Contains(DefinitionDirective.Token))
+                        {
+                            errors.Add(new ExpressionError {
+                                ErrorType = ExpressionError.TokenizedReferencesToken,
+                                ExpressionItem = defref,
+                                DefinitionInfo = def,
+                            });
+                        }
+
+                        if (IsTokenized(def) &&
+                            target.Directives.Contains(DefinitionDirective.Comment))
+                        {
+                            errors.Add(new ExpressionError {
+                                ErrorType = ExpressionError.TokenizedReferencesComment,
+                                ExpressionItem = defref,
+                                DefinitionInfo = def,
+                            });
+                        }
+
+                        if (IsTokenized(def) &&
+                            !IsTokenized(target))
+                        {
+                            errors.Add(new ExpressionError {
+                                ErrorType = ExpressionError.TokenizedReferencesNonToken,
+                                ExpressionItem = defref,
+                                DefinitionInfo = def,
+                            });
+                        }
                     }
                 }
+            }
+
+            if (defs.Count(def => def.Directives.Contains(DefinitionDirective.Whitespace)) > 1)
+            {
+                errors.Add(new ExpressionError {
+                    ErrorType = ExpressionError.MultipleWhitespaceDefinitions,
+                });
             }
 
             return errors;
@@ -155,6 +183,7 @@ namespace MetaphysicsIndustries.Giza
                 DefinitionDirective.Token,
                 DefinitionDirective.Subtoken,
                 DefinitionDirective.Comment,
+                DefinitionDirective.Whitespace,
             };
 
             foreach (var def in defs)
