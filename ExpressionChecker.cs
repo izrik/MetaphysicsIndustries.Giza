@@ -18,9 +18,9 @@ namespace MetaphysicsIndustries.Giza
 
         public List<Error> CheckDefinitionInfosForParsing(IEnumerable<DefinitionExpression> defs)
         {
-            List<Error> errors = CheckDefinitionInfos(defs);
+            var errors = CheckDefinitionInfos(defs);
 
-            Dictionary<string, DefinitionExpression> defsByName = new Dictionary<string, DefinitionExpression>();
+            var defsByName = new Dictionary<string, DefinitionExpression>();
             foreach (var def in defs)
             {
                 defsByName[def.Name] = def;
