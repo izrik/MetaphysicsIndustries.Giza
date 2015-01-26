@@ -15,6 +15,7 @@ namespace MetaphysicsIndustries.Giza
         Token,
         Subtoken,
         Comment,
+        Whitespace,
     }
 
     public static class DefinitionDirectiveHelper
@@ -35,6 +36,8 @@ namespace MetaphysicsIndustries.Giza
                 return "subtoken";
             case DefinitionDirective.Comment:
                 return "comment";
+            case DefinitionDirective.Whitespace:
+                return "whitespace";
             }
 
             throw new ArgumentOutOfRangeException("directive",
