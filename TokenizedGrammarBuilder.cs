@@ -6,9 +6,9 @@ namespace MetaphysicsIndustries.Giza
 {
     public class TokenizedGrammarBuilder
     {
-        // tokenized grammars differ from non-tokenized by virtue of 
-        // 'implicit token' definitions. That is, any occurence of 
-        // LiteralSubExpression or CharClassSubExpression within a 
+        // One of the features that makes tokenized grammars differ from
+        // non-tokenized is 'implicit token' definitions. That is, any
+        // occurence of LiteralSubExpression or CharClassSubExpression within a
         // non-tokenized definition will be converted into a defref 
         // pointing to a new tokenized definition created to take the 
         // place of that subexpr. In this way, non-tokenized definitions
