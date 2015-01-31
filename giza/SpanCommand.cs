@@ -39,6 +39,10 @@ namespace giza
                     Name="show-all",
                     Description="Print out all parse trees, even if more than one valid parse is found",
                 },
+                new Option {
+                    Name="progress",
+                    Description="Periodically display a progress indicator, with estimate time of completion",
+                },
             };
         }
         protected override void InternalExecute(Dictionary<string, object> args)
@@ -48,6 +52,7 @@ namespace giza
             var inputFilename = (string)args["input-filename"];
             var verbose = (bool)args["verbose"];
             var showAll = (bool)args["show-all"];
+            var progress = (bool)args["progress"];
 
             var printingOptions = SpanPrintingOptionsHelper.FromBools(verbose, showAll);
 
@@ -71,10 +76,10 @@ namespace giza
                 input = File.ReadAllText(inputFilename);
             }
 
-            Span(grammar, input, startDef, printingOptions);
+            Span(grammar, input, startDef, printingOptions, progress);
         }
 
-        public static void Span(string grammar, string input, string startDef, SpanPrintingOptions printingOptions)
+        public static void Span(string grammar, string input, string startDef, SpanPrintingOptions printingOptions, bool showProgress=false)
         {
             var spanner = new SupergrammarSpanner();
             var errors = new List<Error>();
@@ -110,9 +115,9 @@ namespace giza
 
             var startDefinition = defs.First(d => d.Name == startDef);
             var g = new Grammar(defs); // the definitions will be linked to the grammar. so we're not _really_ throwing g away after creating it, even though that's what it looks like.
-            Span(input, startDefinition, printingOptions);
+            Span(input, startDefinition, printingOptions, showProgress);
         }
-        public static void Span(string input, Definition startDefinition, SpanPrintingOptions printingOptions)
+        public static void Span(string input, Definition startDefinition, SpanPrintingOptions printingOptions, bool showProgress=false)
         {
             var dc = new DefinitionChecker();
             var errors = new List<Error>();

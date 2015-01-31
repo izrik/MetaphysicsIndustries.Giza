@@ -47,6 +47,10 @@ namespace giza
                     Name="show-all",
                     Description="Print out all parse trees, even if more than one valid parse is found",
                 },
+                new Option {
+                    Name="progress",
+                    Description="Periodically display a progress indicator, with estimate time of completion",
+                },
             };
         }
 
@@ -57,6 +61,7 @@ namespace giza
             var fromFile = (string)args["from-file"];
             var verbose = (bool)args["verbose"];
             var showAll = (bool)args["show-all"];
+            var progress = (bool)args["progress"];
 
             var printingOptions = SpanPrintingOptionsHelper.FromBools(verbose, showAll);
 
@@ -93,7 +98,7 @@ namespace giza
 
             foreach (var input in inputs)
             {
-                SpanCommand.Span(input, startDefinition, printingOptions);
+                SpanCommand.Span(input, startDefinition, printingOptions, progress);
             }
         }
     }

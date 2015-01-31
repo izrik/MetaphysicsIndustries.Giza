@@ -41,6 +41,10 @@ namespace giza
                     Name="show-all",
                     Description="Print out all parse trees, even if more than one valid parse is found",
                 },
+                new Option {
+                    Name="progress",
+                    Description="Periodically display a progress indicator, with estimate time of completion",
+                },
             };
         }
 
@@ -51,6 +55,7 @@ namespace giza
             var inputFilename = (string)args["input-filename"];
             var verbose = (bool)args["verbose"];
             var showAll = (bool)args["show-all"];
+            var progress = (bool)args["progress"];
 
             var printingOptions = SpanPrintingOptionsHelper.FromBools(verbose, showAll);
 
@@ -74,10 +79,10 @@ namespace giza
                 input = File.ReadAllText(inputFilename);
             }
 
-            Parse(grammar, input, startDef, printingOptions);
+            Parse(grammar, input, startDef, printingOptions, progress);
         }
 
-        public static void Parse(string grammar, string input, string startDef, SpanPrintingOptions printingOptions)
+        public static void Parse(string grammar, string input, string startDef, SpanPrintingOptions printingOptions, bool showProgress=false)
         {
             var spanner = new SupergrammarSpanner();
             var grammarErrors = new List<Error>();
@@ -115,9 +120,9 @@ namespace giza
                 return;
             }
 
-            Parse(input, startDefinition, printingOptions);
+            Parse(input, startDefinition, printingOptions, showProgress);
         }
-        public static void Parse(string input, Definition startDefinition, SpanPrintingOptions spanPrintingOption=SpanPrintingOptions.None)
+        public static void Parse(string input, Definition startDefinition, SpanPrintingOptions spanPrintingOption=SpanPrintingOptions.None, bool showProgress=false)
         {
             var parser = new Parser(startDefinition);
             var inputErrors = new List<Error>();
