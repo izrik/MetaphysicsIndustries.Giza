@@ -437,6 +437,99 @@ namespace MetaphysicsIndustries.Giza.Test
         }
 
         [Test]
+        public void TestNoWhitespaceDirective()
+        {
+            // setup
+            //<comment> something = 'value';
+            var dis = new [] {
+                new DefinitionExpression(
+                    name: "something",
+                    directives: new [] {
+                        DefinitionDirective.Token
+                    },
+                    items: new [] {
+                        new LiteralSubExpression("value")
+                    }
+                )
+            };
+            var tgb = new TokenizedGrammarBuilder();
+
+
+            // action
+            var grammar = tgb.BuildTokenizedGrammar(dis);
+            var def = grammar.FindDefinitionByName("something");
+            def whitespace = grammar.FindDefinitionByName("$whitespace");
+
+
+            // assertions
+            Assert.IsNotNull(grammar);
+            Assert.AreEqual(2, grammar.Definitions.Count);
+
+            Assert.IsNotNull(def);
+            Assert.AreEqual(3, def.Directives.Count);
+            Assert.Contains(DefinitionDirective.Comment, def.Directives.ToArray());
+            Assert.Contains(DefinitionDirective.Atomic, def.Directives.ToArray());
+            Assert.Contains(DefinitionDirective.MindWhitespace, def.Directives.ToArray());
+            Assert.IsTrue(def.Atomic);
+            Assert.IsFalse(def.IgnoreCase);
+            Assert.IsTrue(def.IsComment);
+            Assert.IsTrue(def.IsTokenized);
+            Assert.IsTrue(def.MindWhitespace);
+            Assert.IsNotNull(def.Nodes);
+            Assert.AreEqual(5, def.Nodes.Count);
+            Assert.IsNotNull(def.StartNodes);
+            Assert.AreEqual(1, def.StartNodes.Count);
+            Assert.IsNotNull(def.EndNodes);
+            Assert.AreEqual(1, def.EndNodes.Count);
+        }
+
+        [Test]
+        public void TestWhitespaceDirective()
+        {
+            // setup
+            //<comment> something = 'value';
+            var dis = new [] {
+                new DefinitionExpression(
+                    name: "something",
+                    directives: new [] {
+                        DefinitionDirective.Whitespace
+                    },
+                    items: new [] {
+                        new CharClassSubExpression(new CharClass(" \t\r".ToCharArray())),
+                    }
+                )
+            };
+            var tgb = new TokenizedGrammarBuilder();
+
+
+            // action
+            var grammar = tgb.BuildTokenizedGrammar(dis);
+            var def = grammar.FindDefinitionByName("$whitespace");
+
+
+            // assertions
+            Assert.IsNotNull(grammar);
+            Assert.AreEqual(1, grammar.Definitions.Count);
+
+            Assert.IsNotNull(def);
+            Assert.AreEqual(3, def.Directives.Count);
+            Assert.Contains(DefinitionDirective.Comment, def.Directives.ToArray());
+            Assert.Contains(DefinitionDirective.Atomic, def.Directives.ToArray());
+            Assert.Contains(DefinitionDirective.MindWhitespace, def.Directives.ToArray());
+            Assert.IsTrue(def.Atomic);
+            Assert.IsFalse(def.IgnoreCase);
+            Assert.IsTrue(def.IsComment);
+            Assert.IsTrue(def.IsTokenized);
+            Assert.IsTrue(def.MindWhitespace);
+            Assert.IsNotNull(def.Nodes);
+            Assert.AreEqual(5, def.Nodes.Count);
+            Assert.IsNotNull(def.StartNodes);
+            Assert.AreEqual(1, def.StartNodes.Count);
+            Assert.IsNotNull(def.EndNodes);
+            Assert.AreEqual(1, def.EndNodes.Count);
+        }
+
+        [Test]
         public void TestAtomicDirectiveInNonToken()
         {
             // setup

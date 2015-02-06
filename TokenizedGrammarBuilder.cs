@@ -27,14 +27,20 @@ namespace MetaphysicsIndustries.Giza
             Dictionary<string, DefinitionExpression> implicitTokenDefs = new Dictionary<string, DefinitionExpression>();
             List<DefinitionExpression> tokenizedDefs = new List<DefinitionExpression>();
             List<DefinitionExpression> nonTokenizedDefs = new List<DefinitionExpression>();
+            DefinitionExpression whitespaceDef = null;
 
             foreach (DefinitionExpression def in defs)
             {
                 if (def.Directives.Contains(DefinitionDirective.Token) ||
                     def.Directives.Contains(DefinitionDirective.Subtoken) ||
-                    def.Directives.Contains(DefinitionDirective.Comment))
+                    def.Directives.Contains(DefinitionDirective.Comment) ||
+                    def.Directives.Contains(DefinitionDirective.Whitespace))
                 {
                     tokenizedDefs.Add(def);
+                }
+                else if (def.Directives.Contains(DefinitionDirective.Whitespace))
+                {
+                    whitespaceDef = def;
                 }
                 else
                 {
