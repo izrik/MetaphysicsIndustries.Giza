@@ -64,6 +64,7 @@
     <Compile Include="RenderReplCommand.cs" />
     <Compile Include="SpanPrintingOptions.cs" />
     <Compile Include="ErrorHelper.cs" />
+    <Compile Include="BakeReplCommand.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\MetaphysicsIndustries.Giza.csproj">
