@@ -1,0 +1,14 @@
+// File saved at 1/21/2015 9:01:59 AM
+
+expr = '\''? ( s-expr | number | string | identifier );
+
+s-expr = '(' expr* ')';
+
+<token> number = [\d]+;
+
+<token, mind whitespace> string = ( '"' ( [^"\\] | '\\' ["\\dlnrstw] | unicodechar )+ '"' );
+
+<token> identifier = [\l]+;
+
+<subtoken, ignore case> unicodechar = '\\x' [\dabcdef] [\dabcdef] [\dabcdef] [\dabcdef];
+

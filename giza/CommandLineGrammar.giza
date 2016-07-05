@@ -1,0 +1,28 @@
+
+import Supergrammar;
+
+command = (
+    'super' ( filename | '--tokenized' | '--verbose')+ |
+    'span' '--verbose'? filename:grammar '--verbose'? name:start-symbol '--verbose'? ( filename | '-' ) '--verbose'? |
+    'parse' '--verbose'? filename:grammar '--verbose'? name:start-symbol '--verbose'? ( filename | '-' ) '--verbose'? |
+    'render' filename:grammar name:class-name '--tokenized'
+);
+
+<token> name = 
+
+<token> filename = (
+    squoted-string |
+    dquoted-string |
+    unix-path |
+    windows-path
+);
+
+<subtoken> squoted-string = '\'' ( [^'] | '\\' [^\0000] )* '\'';
+
+<subtoken> dquoted-string = '"' ( [^"] | '\\' [^\0000] )* '"';
+
+<subtoken> unix-path = unix-path-part ( [\\/]+ filename-part )+;
+
+<subtoken> windows-path = filename-part ( '/' filename-part )*;
+
+<subtoken> filename-part = [\l\d.

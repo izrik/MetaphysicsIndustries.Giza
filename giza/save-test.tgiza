@@ -1,0 +1,16 @@
+// File saved at 9/9/2014 9:22:26 AM
+
+expr = ( binop | subexpr );
+
+binop = subexpr ( [%*+-/] subexpr )+;
+
+subexpr = ( number | var | unop | paren );
+
+<token> number = [\d]+;
+
+<token> var = [\l]+;
+
+unop = [+-] subexpr;
+
+paren = '(' expr ')';
+

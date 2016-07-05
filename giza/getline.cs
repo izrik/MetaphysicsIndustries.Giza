@@ -3,6 +3,7 @@
 //
 // Authors:
 //   Miguel de Icaza (miguel@novell.com)
+//   Richard Sartor (izrik@izrik.com)
 //
 // Copyright 2008 Novell, Inc.
 //
