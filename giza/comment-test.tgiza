@@ -1,0 +1,26 @@
+﻿
+
+json = value;
+
+value = ( 'false' | 'null' | 'true' | object | array | number | string );
+
+object = '{' ( member:members ( ',' member:members )* )? '}';
+
+member = string:key ':' value:value;
+
+<token> number = [-]? ( '0' | [123456789] [\d]* ) ( '.' [\d]+ )? ( [eE] [+-]? [\d]+ )?;
+
+<token> string = '"' char* '"';
+
+<subtoken> char = ( unescaped |
+        '\\' (  ["\\/bfnrt] |
+                'u' [\dabcdef] [\dabcdef] [\dabcdef] [\dabcdef] ) );
+
+<subtoken> unescaped = [ !#$%&'()*+,-./\d:;<=>?@\d\l\[\]^_`{}|~];
+
+array = '[' ( value ( ',' value )* )? ']';
+
+<comment> comment = (
+    '/*' ( [^*] | '*'+ [^*/] )* '*'+ '/' |
+    ( '//' | '#' ) [^\n]* '\n'
+);

@@ -1,0 +1,4 @@
+expr = item+;
+
+item = [\l\d]+;
+
